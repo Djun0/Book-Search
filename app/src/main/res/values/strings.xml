@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BookSearch</string>
+    <string name="loading">Loading</string>
+    <string name="loading_failed">Loading Fail</string>
+    <string name="retry">Retry</string>
+    <string name="detail">Detail</string>
+</resources>
