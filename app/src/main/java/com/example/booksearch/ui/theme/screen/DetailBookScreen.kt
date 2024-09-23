@@ -22,7 +22,7 @@ import com.example.booksearch.R
 
 
 @Composable
-fun DetailsScreen(imgSrc: String, title: String, description: String, authors: String, modifier: Modifier = Modifier) {
+fun DetailsScreen(imgSrc: Any?, title: String, description: String, authors: String, modifier: Modifier = Modifier) {
 Card(modifier = Modifier
     .fillMaxSize()
     .verticalScroll(rememberScrollState())) {
@@ -31,16 +31,12 @@ Card(modifier = Modifier
             .fillMaxSize()
 
     ) {
+
         AsyncImage(
-            model = ImageRequest.Builder(context = LocalContext.current)
-                .data(imgSrc.replace("http:", "https:"))
-                .diskCachePolicy(coil.request.CachePolicy.DISABLED)
-                .memoryCachePolicy(coil.request.CachePolicy.DISABLED)
-                .crossfade(true)
-                .build(),
+            model = imgSrc,
             contentDescription = null,
             error = painterResource(R.drawable.baseline_broken_image_24),
-            placeholder = painterResource(R.drawable.white_placeholder),
+            placeholder = painterResource(R.drawable.mt_sample_background),
             modifier = Modifier
                 .fillMaxWidth().aspectRatio(0.7f)
                 ,
