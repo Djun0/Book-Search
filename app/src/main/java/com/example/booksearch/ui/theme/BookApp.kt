@@ -1,6 +1,5 @@
 package com.example.booksearch.ui.theme
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,16 +16,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,11 +30,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import coil.ImageLoader
-import coil.disk.DiskCache
-import coil.imageLoader
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
 import com.example.booksearch.R
 import com.example.booksearch.ui.theme.screen.BookViewModel
 import com.example.booksearch.ui.theme.screen.DetailsScreen
@@ -124,41 +115,20 @@ fun AmphibianTopAppBar(modifier: Modifier = Modifier, scrollBehavior: TopAppBarS
 @Composable
 fun NavigateMap(navController: NavHostController = rememberNavController(),
                 viewModel: BookViewModel = viewModel(factory = BookViewModel.Factory)) {
-    val context= LocalContext.current
-    val imageLoader =
 
-        ImageLoader.Builder(context)
-
-            .build()
-
-
-
-    val uiState by viewModel.uiState.collectAsState()
     NavHost(navController = navController, startDestination = BookScreenMap.Start.name) {
         composable(route = BookScreenMap.Start.name) {
             BookHome(onBookClick = { id ->
-                viewModel.getPhotoById(id,imageLoader,context)
+                viewModel.getPhotoById(id)
+                navController.navigate(BookScreenMap.Detail.name)
             })
         }
         composable(route = BookScreenMap.Detail.name) {
-            DetailsScreen(
-                uiState.thumbnail, title = uiState.title,
+
+            val uiState by viewModel.uiState.collectAsState()
+            DetailsScreen(uiState.thumbnail, title = uiState.title,
                 authors = uiState.authors,
                 description = uiState.description)
         }
     }
-
-    val shouldNavigate=viewModel.shouldNavigate
-    LaunchedEffect(shouldNavigate) {
-
-
-
-        if(shouldNavigate){
-            navController.navigate(BookScreenMap.Detail.name)
-            viewModel.shouldNavigate = false
-        }
-
-
-    }
-
 }
